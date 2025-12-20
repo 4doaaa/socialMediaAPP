@@ -1,0 +1,107 @@
+PROJECT-2-socialMediaApp
+│
+├── config                  # مجلد الإعدادات
+│   └── .env.dev            # ملف متغيرات البيئة للوضع الـ Development
+│
+├── dist                    # المجلد الناتج بعد الـ build (الملفات المترجمة إلى JavaScript)
+│   ├── DB
+│   │   └── connection.js
+│   │
+│   ├── models
+│   │   └── user.model.js
+│   │
+│   ├── repository
+│   │   ├── database.repository.js
+│   │   └── user.repository.js
+│   │
+│   ├── Middlewares
+│   │   ├── authentication.middleware.js
+│   │   └── validation.middleware.js
+│   │
+│   ├── Modules
+│   │   ├── Auth
+│   │   │   ├── auth.controller.js
+│   │   │   ├── auth.dto.js
+│   │   │   ├── auth.service.js
+│   │   │   └── auth.validation.js
+│   │   │
+│   │   └── User
+│   │       ├── user.controller.js
+│   │       ├── user.dto.js
+│   │       ├── user.service.js
+│   │       └── user.validation.js
+│   │
+│   ├── Utils
+│   │   ├── email
+│   │   │   ├── send.email.js
+│   │   │   ├── verify.email.template.js
+│   │   │   └── events
+│   │   │       └── email.events.js
+│   │   │
+│   │   ├── response
+│   │   │   └── error.response.js
+│   │   │
+│   │   ├── security
+│   │   │   ├── generateOtp.js
+│   │   │   ├── hash.js
+│   │   │   └── token.js
+│   │   │
+│   │   └── types
+│   │       └── request.express.js
+│   │
+│   ├── app.controller.js
+│   └── index.js
+│
+├── src                     # المجلد الرئيسي للكود المصدر (TypeScript)
+│   ├── DB
+│   │   └── connection.ts               # اتصال قاعدة البيانات (MongoDB)
+│   │
+│   ├── models
+│   │   └── user.model.ts               # تعريف الـ User Schema + Interface + Enums
+│   │
+│   ├── repository
+│   │   ├── database.repository.ts      # الكلاس الـ Generic للـ CRUD operations
+│   │   └── user.repository.ts          # Repository خاص بالـ User
+│   │
+│   ├── Middlewares
+│   │   ├── authentication.middleware.ts  # Middleware التحقق من الـ JWT والصلاحيات
+│   │   └── validation.middleware.ts      # Middleware التحقق من صحة البيانات (ربما بـ Joi أو Zod)
+│   │
+│   ├── Modules
+│   │   ├── Auth                            # Module الـ Authentication
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.dto.ts                 # Data Transfer Objects للـ Auth
+│   │   │   ├── auth.service.ts
+│   │   │   └── auth.validation.ts
+│   │   │
+│   │   └── User                            # Module الـ User
+│   │       ├── user.controller.ts
+│   │       ├── user.dto.ts
+│   │       ├── user.service.ts
+│   │       └── user.validation.ts
+│   │
+│   ├── Utils                               # أدوات مساعدة مشتركة
+│   │   ├── email
+│   │   │   ├── send.email.ts               # إرسال الإيميل باستخدام Nodemailer
+│   │   │   ├── verify.email.template.ts    # قالب HTML لإيميل التحقق
+│   │   │   └── events
+│   │   │       └── email.events.ts         # Event Emitter لإدارة أحداث الإيميلات
+│   │   │
+│   │   ├── response
+│   │   │   └── error.response.ts           # Custom Exceptions + Global Error Handler
+│   │   │
+│   │   ├── security
+│   │   │   ├── generateOtp.ts              # توليد OTP
+│   │   │   ├── hash.ts                     # تشفير كلمات المرور (bcrypt)
+│   │   │   └── token.ts                    # إنشاء وفك وتحقق الـ JWT
+│   │   │
+│   │   └── types
+│   │       └── request.express.ts          # Type augmentation لإضافة user و decoded إلى Express Request
+│   │
+│   ├── app.controller.ts                   # (ربما router رئيسي أو تجميع الـ routes)
+│   └── index.ts                            # نقطة الدخول الرئيسية للتطبيق (تشغيل السيرفر)
+│
+├── node_modules
+├── package.json
+├── package-lock.json
+└── tsconfig.json                           # إعدادات TypeScript
