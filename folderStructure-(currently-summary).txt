@@ -5,52 +5,52 @@ PROJECT-2-socialMediaApp
 │
 ├── dist                    # المجلد الناتج بعد الـ build (الملفات المترجمة إلى JavaScript)
 │   ├── DB
-│   │   └── connection.ts
+│   │   └── connection.js
 │   │
 │   ├── models
-│   │   └── user.model.ts
+│   │   └── user.model.js
 │   │
 │   ├── repository
-│   │   ├── database.repository.ts
-│   │   └── user.repository.ts
+│   │   ├── database.repository.js
+│   │   └── user.repository.js
 │   │
 │   ├── Middlewares
-│   │   ├── authentication.middleware.ts
-│   │   └── validation.middleware.ts
+│   │   ├── authentication.middleware.js
+│   │   └── validation.middleware.js
 │   │
 │   ├── Modules
 │   │   ├── Auth
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── auth.dto.ts
-│   │   │   ├── auth.service.ts
-│   │   │   └── auth.validation.ts
+│   │   │   ├── auth.controller.js
+│   │   │   ├── auth.dto.js
+│   │   │   ├── auth.service.js
+│   │   │   └── auth.validation.js
 │   │   │
 │   │   └── User
-│   │       ├── user.controller.ts
-│   │       ├── user.dto.ts
-│   │       ├── user.service.ts
-│   │       └── user.validation.ts
+│   │       ├── user.controller.js
+│   │       ├── user.dto.js
+│   │       ├── user.service.js
+│   │       └── user.validation.js
 │   │
 │   ├── Utils
 │   │   ├── email
-│   │   │   ├── send.email.ts
-│   │   │   ├── verify.email.template.ts
+│   │   │   ├── send.email.js
+│   │   │   ├── verify.email.template.js
 │   │   │   └── events
-│   │   │       └── email.events.ts
+│   │   │       └── email.events.js
 │   │   │
 │   │   ├── response
-│   │   │   └── error.response.ts
+│   │   │   └── error.response.js
 │   │   │
 │   │   ├── security
-│   │   │   ├── generateOtp.ts
-│   │   │   ├── hash.ts
-│   │   │   └── token.ts
+│   │   │   ├── generateOtp.js
+│   │   │   ├── hash.js
+│   │   │   └── token.js
 │   │   │
 │   │   └── types
-│   │       └── request.express.ts
+│   │       └── request.express.js
 │   │
-│   ├── app.controller.ts
-│   └── index.ts
+│   ├── app.controller.js
+│   └── index.js
 │
 ├── src                     # المجلد الرئيسي للكود المصدر (TypeScript)
 │   ├── DB
