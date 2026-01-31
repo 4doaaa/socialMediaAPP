@@ -1,0 +1,72 @@
+PROJECT-2
+│
+├── config                  # إعدادات المشروع
+│   └── .env.dev            # ملف المتغيرات البيئية للتطوير (development)
+│
+├── dist                    # الملفات المترجمة (JavaScript) بعد تشغيل tsc
+│   └── (يحتوي على index.js وغيره بعد البناء)
+│
+├── node_modules            # كل الـ packages المثبتة (لا يُضاف للـ git عادة)
+│
+├── src                     # المجلد الرئيسي للكود المصدري (TypeScript)
+│   │
+│   ├── DB                  # كل ما يخص قاعدة البيانات
+│   │   ├── connection.ts            # الاتصال بـ MongoDB
+│   │   │
+│   │   ├── models                   # نماذج Mongoose (Schemas)
+│   │   │   ├── token.model.ts       # موديل التوكنات (ربما للـ blacklisting أو refresh)
+│   │   │   └── user.model.ts        # موديل المستخدم الرئيسي
+│   │   │
+│   │   └── repository               # طبقة Repository Pattern (فصل الـ DB logic)
+│   │       ├── database.repository.ts   # (ربما base repository عام)
+│   │       ├── token.repository.ts      # عمليات التوكنات في الداتابيز
+│   │       └── user.repository.ts       # عمليات المستخدمين في الداتابيز
+│   │
+│   ├── Middlewares             # الـ middlewares العامة
+│   │   ├── authentication.middleware.ts   # التحقق من التوكن + الأدوار
+│   │   └── validation.middleware.ts       # التحقق من الـ request باستخدام Zod
+│   │
+│   ├── Modules                 # الـ features / domains الرئيسية (تقسيم حسب الموديول)
+│   │   │
+│   │   ├── Auth                # موديول المصادقة والتسجيل
+│   │   │   ├── auth.controller.ts     # الـ routes handlers
+│   │   │   ├── auth.dto.ts            # أنواع الـ DTO (بيانات الإدخال)
+│   │   │   ├── auth.service.ts        # الـ business logic
+│   │   │   └── auth.validation.ts     # Zod schemas للتحقق من البيانات
+│   │   │
+│   │   └── User                # موديول المستخدم (البروفايل، الصور، اللوج آوت...)
+│   │       ├── user.controller.ts     # handlers للـ profile, image, cover...
+│   │       ├── user.dto.ts            # أنواع بيانات الـ user routes
+│   │       ├── user.service.ts        # المنطق الخاص بالمستخدم
+│   │       └── user.validation.ts     # Zod schemas خاصة بالـ user
+│   │
+│   └── Utils                   # أدوات مساعدة عامة (helpers)
+│       │
+│       ├── email               # كل ما يخص إرسال الإيميلات
+│       │   ├── events          # (ربما event-driven email logic)
+│       │   │   └── email.events.ts
+│       │   ├── send-email.ts         # دالة إرسال الإيميل
+│       │   └── verify-email-template.ts   # قالب HTML لتأكيد الإيميل
+│       │
+│       ├── multer              # إعدادات رفع الملفات
+│       │   └── cloud.multer.ts       # Multer config للـ cloud (memory/disk)
+│       │
+│       ├── s3.config.ts              # إعدادات AWS S3 + upload/delete/presigned
+│       │
+│       ├── response                    # ردود API موحدة
+│       │   └── error.response.ts     # كلاسات الـ errors (BadRequestException...)
+│       │
+│       ├── security                    # أمان وتشفير
+│       │   ├── generateOtp.ts        # توليد كود OTP
+│       │   ├── hash.ts               # تشفير الباسوورد (bcrypt wrapper)
+│       │   └── token.ts              # إنشاء/التحقق/إبطال التوكنات (JWT)
+│       │
+│       └── types                       # تعريفات أنواع TypeScript إضافية
+│           └── request.express.ts    # توسيع Request ليشمل user & decoded
+│
+├── app.ts                      # (غالبًا) إعداد الـ Express app + middlewares + routes
+├── index.ts                    # نقطة الدخول الرئيسية (bootstrap السيرفر)
+│
+├── package-lock.json           # قفل إصدارات الـ packages
+├── package.json                # الـ dependencies, devDependencies, scripts
+└── tsconfig.json               # إعدادات TypeScript (compiler options)
