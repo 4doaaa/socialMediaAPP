@@ -8,6 +8,8 @@ import path from "node:path";
 import { config } from "dotenv";
 import authRouter from "./Modules/Auth/auth.controller";
 import userRouter from "./Modules/User/user.controller";
+import postRouter from "./Modules/post/post.controller";
+import commentRouter from "./Modules/post/post.controller";
 import { BadRequestException, globalErrorHandler } from "./Utils/response/error.response";
 import connectDB from "./DB/connection";
 import { promisify } from "node:util";
@@ -42,8 +44,8 @@ export const bootstrap = async () => {
 
     // ==================== Get Pre-signed URL for S3 Uploads ====================
     app.get("/uploads/pre-signed/*path", async (req:Request, res:Response) => {
-        const {path} = req.params as unknown as {path: string []};
-        const Key = path.join("/");
+        const {path: filePath} = req.params as unknown as {path: string []};
+        const Key = filePath.join("/")
         const url = await createGetPresignedURL({
             Key,
         });
@@ -53,8 +55,8 @@ export const bootstrap = async () => {
     // ==================== Serve / Download File from S3 ====================
     app.get("/uploads/*path", async (req:Request, res:Response) => {
         const {downloadName} = req.query;
-        const {path} = req.params as unknown as {path: string []};
-        const Key = path.join("/")
+        const {path: filePath} = req.params as unknown as {path: string []};
+        const Key = filePath.join("/")
         const s3Response = await getFile({Key});
 
         if(!s3Response.Body){ 
@@ -97,14 +99,57 @@ export const bootstrap = async () => {
 
     // ==================== API Routes Mounting ====================
     app.use("/api/v1/auth", authRouter);
+    app.use("/api/v1/post", postRouter);
     app.use("/api/v1/user", userRouter);
+    app.use("/api/v1/comment", commentRouter);
+
 
     // ==================== Catch-All 404 Not Found Handler ====================
     app.use("{/*dummy}", (req: Request, res: Response) => {
         res.status(404).json({ message: "Not Found Handler" });
     });
 
+//     async function user() { 
+
+// try {
+//     const user = new UserModel({
+//         username:"test test",
+//         email:`${Date.now()}@gmail.com`,
+//         password: "doaa@2005",
+//     });
+//  await user.save();
+//  user.lastName = "monem";
+
+// async function testUserModel() { 
+//     try {
+//   const userRepository = new UserRepository(UserModel);
+//   const user = await userRepository.findOneAndUpdate({
+
+
+//     filter:{_id: "69836231796279fae7a1c193"},
+//     update: {freezedAt:new Date()}
+// });
+//  const user = await userRepository.findOneAndDelete({
+//     filter:{_id: "698361ca59443e8d8657c72b"},
+// });
+
+
+// const user = await UserModel.insertMany({
+//     data:[
+//     {username:"Doaa Monem", email:`${Date.now()}@gmail.com`, password: "doaa@2005"},
+//     {username:"Doaa Monem", email:`${Date.now()}asal@gmail.com`, password: "asal@2005"}
+// ]})
+// console.log({results: user});
+
+//     } catch (error) {
+//         console.log("Error in testUserModel:", error);
+//     }
+// }
+// testUserModel();
+
     // ==================== Global Error Handler ====================
+    
+    
     app.use(globalErrorHandler);
 
     // ==================== Start Express Server ====================

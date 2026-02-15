@@ -1,4 +1,4 @@
-// ==================== Imports & Required Modules ====================
+// ==================== Import Dependencies & Core Modules ====================
 import {  Request, Response } from "express";
 import { LogoutDTO } from "./user.dto";
 import { createRevokeToken, LogoutEnum } from "../../Utils/security/token";
@@ -8,13 +8,13 @@ import { IUser, UserModel } from "../../DB/models/user.model";
 import { UserRepository } from "../../DB/repository/user.repository";
 import { createPresignedURL, uploadFiles, uploadLargeFile } from "../../Utils/multer/s3.config";
 
-// ==================== Authentication Service Class ====================
+// ==================== User Service Class Implementation ====================
 class UserService {
     private _userModel = new UserRepository(UserModel);
     
     constructor() {}
 
-    // ==================== Get Authenticated User Profile ====================
+// ==================== Get User Profile Logic ====================
     getProfile = async (req: Request, res: Response): Promise<Response> => {
         return res.status(200).json({
              message:"Done" ,
@@ -22,13 +22,14 @@ class UserService {
          });
     };
 
-    // ==================== User Logout (Single Device or All Devices) ====================
+// ==================== User Logout & Token Revocation Logic ====================
     logout = async (req: Request, res: Response): Promise<Response> => {
         const { flag } :LogoutDTO = req.body ;
         
         let statusCode: number = 200 ;
         const update: UpdateQuery<IUser> = { };
         
+// ==================== Logout Strategy Switch (Single vs All Devices) ====================
         switch (flag) {
             case LogoutEnum.ONLY:
                 await createRevokeToken(req.decoded as JwtPayload); ;
@@ -51,7 +52,7 @@ class UserService {
              });
     };
 
-    // ==================== Upload / Update Profile Image (Using Pre-signed URL) ====================
+// ==================== Profile Image Management (S3 Presigned URL) ====================
     profileImage = async (req: Request, res: Response): Promise<Response> => {
        
         // const Key = await uploadFile({
@@ -78,7 +79,7 @@ class UserService {
         return res.status(200).json({ message:"Done", url, Key });
     };
 
-    // ==================== Upload Multiple Cover Images ====================
+// ==================== Bulk Cover Images Upload Logic ====================
     coverImages = async (req: Request, res: Response): Promise<Response> => {
        
       const urls = await uploadFiles({
@@ -93,5 +94,5 @@ class UserService {
     }
 }
 
-// ==================== Export Service Instance & Type ====================
+// ==================== Export Service Instance ====================
 export default new UserService();

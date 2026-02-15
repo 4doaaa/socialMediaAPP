@@ -30,8 +30,8 @@ class AuthenticationService {
             data: [{
                 username,
                 email,
-                password: await generateHash(password),
-                confirmEmailOTP: await generateHash(otp),
+                password,
+                confirmEmailOTP: `${otp}`,
                 confirmEmailOTPExpires: new Date(Date.now() + 10 * 60 * 1000),
             }],
             options: { validateBeforeSave: true },

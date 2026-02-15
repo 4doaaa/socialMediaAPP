@@ -1,72 +1,90 @@
+clean, accurate, and complete *folder structure summary* 
+
 PROJECT-2
 │
-├── config                  # إعدادات المشروع
-│   └── .env.dev            # ملف المتغيرات البيئية للتطوير (development)
+├── config_dev                 # Development-specific configuration files (usually env vars, DB config, etc.)
 │
-├── dist                    # الملفات المترجمة (JavaScript) بعد تشغيل tsc
-│   └── (يحتوي على index.js وغيره بعد البناء)
+├── node_modules               # All installed npm packages (auto-generated – do not edit manually)
 │
-├── node_modules            # كل الـ packages المثبتة (لا يُضاف للـ git عادة)
+├── dist                       # Compiled JavaScript output after tsc build (production-ready code)
 │
-├── src                     # المجلد الرئيسي للكود المصدري (TypeScript)
+├── src                        # Main source code folder – everything you write lives here
 │   │
-│   ├── DB                  # كل ما يخص قاعدة البيانات
-│   │   ├── connection.ts            # الاتصال بـ MongoDB
+│   ├── DB                     # Database layer: models, repositories, connection logic
+│   │   ├── models             # Mongoose schemas / models
+│   │   │   ├── comment.model.ts      # Comment schema & model
+│   │   │   ├── post.model.ts         # Post schema & model
+│   │   │   ├── token.model.ts        # Token schema (probably for OTP, reset password, etc.)
+│   │   │   └── user.model.ts         # User schema & model
 │   │   │
-│   │   ├── models                   # نماذج Mongoose (Schemas)
-│   │   │   ├── token.model.ts       # موديل التوكنات (ربما للـ blacklisting أو refresh)
-│   │   │   └── user.model.ts        # موديل المستخدم الرئيسي
-│   │   │
-│   │   └── repository               # طبقة Repository Pattern (فصل الـ DB logic)
-│   │       ├── database.repository.ts   # (ربما base repository عام)
-│   │       ├── token.repository.ts      # عمليات التوكنات في الداتابيز
-│   │       └── user.repository.ts       # عمليات المستخدمين في الداتابيز
+│   │   └── repository         # Repository pattern – data access layer
+│   │       ├── comment.repository.ts
+│   │       ├── database.repository.ts   # Generic/base repository
+│   │       ├── post.repository.ts
+│   │       ├── token.repository.ts
+│   │       └── user.repository.ts
 │   │
-│   ├── Middlewares             # الـ middlewares العامة
-│   │   ├── authentication.middleware.ts   # التحقق من التوكن + الأدوار
-│   │   └── validation.middleware.ts       # التحقق من الـ request باستخدام Zod
+│   ├── Middlewares            # Express middlewares (auth, validation, error handling, etc.)
+│   │   ├── authentication.middleware.ts
+│   │   └── validation.middleware.ts      # Zod/Joi validation middleware + generalFields
 │   │
-│   ├── Modules                 # الـ features / domains الرئيسية (تقسيم حسب الموديول)
+│   ├── Modules                # Feature-based folders – each module has its own controllers, services, etc.
+│   │   ├── Auth               # Authentication & authorization module
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.dto.ts
+│   │   │   ├── auth.service.ts
+│   │   │   └── auth.validation.ts
 │   │   │
-│   │   ├── Auth                # موديول المصادقة والتسجيل
-│   │   │   ├── auth.controller.ts     # الـ routes handlers
-│   │   │   ├── auth.dto.ts            # أنواع الـ DTO (بيانات الإدخال)
-│   │   │   ├── auth.service.ts        # الـ business logic
-│   │   │   └── auth.validation.ts     # Zod schemas للتحقق من البيانات
+│   │   ├── comment            # Comment feature module
+│   │   │   ├── comment.authorization.ts
+│   │   │   ├── comment.controller.ts     # comment routes
+│   │   │   ├── comment.service.ts
+│   │   │   └── comment.validation.ts     # Zod schema for comments
 │   │   │
-│   │   └── User                # موديول المستخدم (البروفايل، الصور، اللوج آوت...)
-│   │       ├── user.controller.ts     # handlers للـ profile, image, cover...
-│   │       ├── user.dto.ts            # أنواع بيانات الـ user routes
-│   │       ├── user.service.ts        # المنطق الخاص بالمستخدم
-│   │       └── user.validation.ts     # Zod schemas خاصة بالـ user
+│   │   └── post               # Post feature module
+│   │       ├── post.authorization.ts
+│   │       ├── post.controller.ts        # post routes
+│   │       ├── post.dto.ts
+│   │       ├── post.service.ts
+│   │       └── post.validation.ts
 │   │
-│   └── Utils                   # أدوات مساعدة عامة (helpers)
-│       │
-│       ├── email               # كل ما يخص إرسال الإيميلات
-│       │   ├── events          # (ربما event-driven email logic)
-│       │   │   └── email.events.ts
-│       │   ├── send-email.ts         # دالة إرسال الإيميل
-│       │   └── verify-email-template.ts   # قالب HTML لتأكيد الإيميل
-│       │
-│       ├── multer              # إعدادات رفع الملفات
-│       │   └── cloud.multer.ts       # Multer config للـ cloud (memory/disk)
-│       │
-│       ├── s3.config.ts              # إعدادات AWS S3 + upload/delete/presigned
-│       │
-│       ├── response                    # ردود API موحدة
-│       │   └── error.response.ts     # كلاسات الـ errors (BadRequestException...)
-│       │
-│       ├── security                    # أمان وتشفير
-│       │   ├── generateOtp.ts        # توليد كود OTP
-│       │   ├── hash.ts               # تشفير الباسوورد (bcrypt wrapper)
-│       │   └── token.ts              # إنشاء/التحقق/إبطال التوكنات (JWT)
-│       │
-│       └── types                       # تعريفات أنواع TypeScript إضافية
-│           └── request.express.ts    # توسيع Request ليشمل user & decoded
+│   ├── Utils                  # Shared utilities & helpers (not feature-specific)
+│   │   ├── email              # Email sending logic
+│   │   │   ├── email.events.ts
+│   │   │   ├── send.email.ts
+│   │   │   └── verify.email.template.ts
+│   │   │
+│   │   ├── multer             # File upload configuration (local or cloud)
+│   │   │   ├── cloud.multer.ts
+│   │   │   └── s3.config.ts           # S3 / Cloud storage config
+│   │   │
+│   │   ├── response           # Standardized response & error classes
+│   │   │   ├── error.response.ts
+│   │   │   └── response.ts
+│   │   │
+│   │   ├── security           # Security-related utilities
+│   │   │   ├── generateOtp.ts
+│   │   │   ├── hash.ts
+│   │   │   └── token.ts               # JWT generation & verification
+│   │   │
+│   │   └── types.ts                   # Shared TypeScript types (Request extensions, etc.)
+│   │
+│   ├── app.controller.ts              # Possibly root or global controller (or entry point)
+│   └── index.ts                       # Main entry file – usually starts the Express server
 │
-├── app.ts                      # (غالبًا) إعداد الـ Express app + middlewares + routes
-├── index.ts                    # نقطة الدخول الرئيسية (bootstrap السيرفر)
-│
-├── package-lock.json           # قفل إصدارات الـ packages
-├── package.json                # الـ dependencies, devDependencies, scripts
-└── tsconfig.json               # إعدادات TypeScript (compiler options)
+├── .gitignore                         # Files/folders to ignore in git
+├── package-lock.json                  # Exact versions of dependencies (auto-generated)
+├── package.json                       # Project metadata, scripts, dependencies
+└── tsconfig.json                      # TypeScript compiler configuration
+```
+
+# Quick Summary of Folder Responsibilities 
+
+- DB/ → All database-related code (schemas + data access logic)
+- Middlewares/ → Reusable Express middlewares (auth, validation, etc.)
+- Modules/ → Feature folders — each module (auth, comment, post, user) has its own routes, logic, validation
+- Utils/ → Shared helpers (email, file upload, hashing, tokens, response format, types)
+- src/ → The heart of the project — all your handwritten code lives here
+- dist/ → Auto-generated compiled JS (do not edit manually)
+- config_dev/ → Development environment configs (usually .env related)
+ 
