@@ -9,11 +9,11 @@ const router: Router = Router();
 
 // ==================== Authentication Routes ====================
 
-router.post("/signup", validation(signUpSchema), authService.signup);
+router.post("/signup", validation({ body: signUpSchema }), authService.signup);
 
 router.post("/login", authService.login);
 
-router.patch("/confirm-email", validation(confirmEmailSchema), authService.confirmEmail);
+router.patch("/confirm-email", validation({ body: confirmEmailSchema }), authService.confirmEmail);
 
 // ==================== Export Router ====================
 

@@ -88,13 +88,11 @@ export class ChatService {
     const dbParticipants = participants.map((participant) =>{
       return Types.ObjectId.createFromHexString(participant)
     });
-      const users = await this._userModel.find({
+     const users = await this._userModel.find({
         filter: {
-            _id: {$in: dbParticipants},
-            friends: {$in: [req.user?._id as Types.ObjectId]},
-        
+            _id: { $in: dbParticipants }
         },
-      });
+    });
       if(dbParticipants.length !== users.length) {
         throw new BadRequestException("Invalid Participants");
       }
@@ -133,7 +131,7 @@ export class ChatService {
     const createdBy = socket.credentials?.user._id as Types.ObjectId;
 
     const user = await this._userModel.findOne({
-        filter:{_id: Types.ObjectId.createFromHexString(sendTo)
+        filter:{_id: Types.ObjectId.createFromHexString(sendTo),
             friends: {$in: [createdBy]},
         },
     })

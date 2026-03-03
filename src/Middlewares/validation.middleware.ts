@@ -14,6 +14,9 @@ export const generalFields = {
   id: z.string().refine((val) => Types.ObjectId.isValid(val), {
     message: "Invalid ObjectId format",
   }),
+  username: z.string().min(3).max(30), 
+  email: z.string().email(),
+  otp: z.string().length(6),
 // ==================== File Object Validation (Multer) ====================
   file: (allowedExtensions: string[]) =>
     z.object({
@@ -44,7 +47,7 @@ export const validation = (schema: SchemaType) => {
       const result = schema[key]!.safeParse(req[key]);
 
       if (!result.success) {
-        validationErrors.push(result.error.issues);
+       validationErrors.push(...result.error.issues);
       }
     }
 

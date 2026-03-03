@@ -31,7 +31,7 @@ export const createGroupChatSchema = {
     }).superRefine((data, ctx) => {
         if (
             data.participants?.length &&
-            data.participants.length !== [new Set(data.participants)].length
+            data.participants.length !== new Set(data.participants).size
         ) {
             ctx.addIssue({
                 code: "custom",
