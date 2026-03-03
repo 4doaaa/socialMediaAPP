@@ -10,12 +10,13 @@ import authRouter from "./Modules/Auth/auth.controller";
 import userRouter from "./Modules/User/user.controller";
 import postRouter from "./Modules/post/post.controller";
 import commentRouter from "./Modules/post/post.controller";
+import chatRouter from "./Modules/chat/chat.controller";
 import { BadRequestException, globalErrorHandler } from "./Utils/response/error.response";
 import connectDB from "./DB/connection";
 import { promisify } from "node:util";
 import { createGetPresignedURL, deleteFile, deleteFiles, getFile } from "./Utils/multer/s3.config";
 import { pipeline } from "node:stream";
-
+import { initialize } from "./Modules/geteway/gateway";
 // ==================== S3 Stream Pipeline Promisification ====================
 const createS3WriteStreamPipe = promisify(pipeline);
 
@@ -35,7 +36,7 @@ const limiter = rateLimit({
 // ==================== Bootstrap Function (Application Initialization) ====================
 export const bootstrap = async () => {
     const app: Express = express();
-    const port: number = Number(process.env.PORT) || 5000;
+    const port: number = Number(process.env.PORT) || 3000;
 
     // ==================== Global Middlewares ====================
     app.use(cors(), express.json(), helmet());
@@ -82,7 +83,7 @@ export const bootstrap = async () => {
     });
 
     // ==================== Delete Multiple Files from S3 (Test Endpoint) ====================
-    app.delete("/test", async (req:Request, res:Response) => {
+    app.delete("/test", async (_req:Request, res:Response) => {
         const results = await deleteFiles({
             urls: [
                 "SOCIAL_MEDIA_APP/users/undefined/da8297a2-211e-4aa8-9705-b2d666b0cfb0-toleen1.jpeg",
@@ -93,7 +94,7 @@ export const bootstrap = async () => {
     });
 
     // ==================== Root Route (Welcome Message) ====================
-    app.get("/", (req: Request, res: Response) => {
+    app.get("/", (_req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome To Social Media App" });
     });
 
@@ -102,10 +103,11 @@ export const bootstrap = async () => {
     app.use("/api/v1/post", postRouter);
     app.use("/api/v1/user", userRouter);
     app.use("/api/v1/comment", commentRouter);
-
+    app.use("/api/v1/user", userRouter);
+    app.use("/api/v1/chat", chatRouter);
 
     // ==================== Catch-All 404 Not Found Handler ====================
-    app.use("{/*dummy}", (req: Request, res: Response) => {
+    app.use("{/*dummy}", (_req: Request, res: Response) => {
         res.status(404).json({ message: "Not Found Handler" });
     });
 
@@ -152,8 +154,61 @@ export const bootstrap = async () => {
     
     app.use(globalErrorHandler);
 
-    // ==================== Start Express Server ====================
-    app.listen(port, () => {
+
+    const httpServer = app.listen(port, () => {
         console.log(`Server is Running On http://localhost:${port}`);
     });
-};
+
+initialize(httpServer);
+
+    // ==================== Start Express Server ====================
+   
+   
+    
+//         console.log("Classic Connection",socket.id);
+// let connectedSockets: string[] = [];
+// connectedSockets.push(socket.id);
+
+// io.to(connectedSockets[connectedSockets.length - 3] as string).emit("product", { id: 1, title: "Apple Laptop", price: 3000000}, (res) =>{
+//     console.log({ res });
+    
+// },
+// );
+
+// io.except(connectedSockets[connectedSockets.length - 3] as string).emit(
+//     "product", { id: 1, title: "Apple Laptop", price: 3000000}, (res) =>{
+//     console.log({ res });
+// },//هبعت لكل الناس ماعدا البني ادم ده 
+// );
+
+
+
+//         socket.on("sayHi", (data, callback) => {
+//     console.log({data});
+//     callback("Hello From BE to i received All data");
+// });
+
+//         socket.emit("product", { id: 1, title: "Apple Laptop", price: 3000000});
+      
+
+// socket.emit("product", { id: 1, title: "Apple Laptop", price: 3000000}, (res) =>{
+//     console.log({res});
+// });
+
+// socket.broadcast.emit("product", { id: 1, title: "Apple Laptop", price: 3000000}, (res) =>{
+//     console.log({res});
+// });
+
+// io.emit("product", { id: 1, title: "Apple Laptop", price: 3000000}, (res) =>{//ببعت لكل العملاء المتصلين 
+//     console.log({res});
+// });
+
+
+
+    // http://localhost:3000/admin/
+// io.of("/admin").on("connection", (socket) => {
+//     console.log("Admin Connected",socket.id);
+// });
+ };
+
+ export default bootstrap;

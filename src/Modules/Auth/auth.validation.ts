@@ -2,48 +2,44 @@ import * as z from "zod";
 import { generalFields } from "../../Middlewares/validation.middleware";
 
 // ==================== Login Validation Schema ====================
-
-export const loginSchema = {
+export const loginSchema = z.object({
     body: z.strictObject({
-        email: generalFields.email,
-        password: generalFields.password,
+        email: z.string().email(),
+        password: z.string().min(8),
     }),
-};
+});
 
 // ==================== Signup Validation Schema ====================
+export const signUpSchema = z.object({ 
+    body: z.strictObject({
+        username: generalFields.username,
+        email: z.string().email(),
+        password: z.string().min(8),
+        confirmPassword: z.string().min(8),
+    }).superRefine((data, ctx) => {
 
-export const signUpSchema = {
-    body: loginSchema.body
-        .extend({
-            username: generalFields.username,
-            confirmPassword: generalFields.confirmPassword,
-        })
-        .superRefine((data, ctx) => {
-            // Password and confirmPassword must match
-            if (data.password !== data.confirmPassword) {
-                ctx.addIssue({
-                    code: "custom",
-                    path: ["confirmPassword"],
-                    message: "Password Mismatch",
-                });
-            }
+        if (data.password !== data.confirmPassword) {
+            ctx.addIssue({
+                code: "custom",
+                path: ["confirmPassword"],
+                message: "Passwords don't match",
+            });
+        }
 
-            // Username must contain exactly 2 words (first name + last name)
-            if (data.username.trim().split(/\s+/).length !== 2) {
-                ctx.addIssue({
-                    code: "custom",
-                    path: ["username"],
-                    message: "Username must contain exactly 2 words (first and last name)",
-                });
-            }
-        }),
-};
+        if (data.username && data.username.trim().split(/\s+/).length !== 2) {
+            ctx.addIssue({
+                code: "custom",
+                path: ["username"],
+                message: "Username must be exactly two words",
+            });
+        }
+    })
+});
 
 // ==================== Confirm Email Validation Schema ====================
-
-export const confirmEmailSchema = {
-    body: z.strictObject({
+export const confirmEmailSchema = z.object({
+    body: z.object({
         email: generalFields.email,
         otp: generalFields.otp,
     }),
-};
+});

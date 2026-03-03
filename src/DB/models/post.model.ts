@@ -1,6 +1,6 @@
 // ==================== Import Mongoose Dependencies & Types ====================
 import { HydratedDocument, model, models, Schema, Types } from "mongoose";
-import { ref } from "process";
+
 
 // ==================== Post Enumerations (Settings & Actions) ====================
 export enum AllowCommentsEnum {
@@ -46,7 +46,7 @@ export interface IPost {
 export type HPostDocument = HydratedDocument<IPost>;
 
 // ==================== Post Schema Implementation ====================
-const postSchema = new Schema<IPost>({
+export const postSchema = new Schema<IPost>({
 // ==================== Content & Asset Storage Fields ====================
     content : {
         type: String,
@@ -88,5 +88,17 @@ const postSchema = new Schema<IPost>({
     timestamps: true,
 });
 
+
+postSchema.pre(["find", "findOne","findOneAndUpdate","updateOne"],
+     function(next){
+        const query = this.getQuery();
+        if (query.paranoId === false) {
+            this.setQuery({ ...query});
+        } else {
+            this.setQuery({ ...query, freezedAt: { $exists: false }});
+     } 
+     next();
+     }
+);
 // ==================== Export Post Model ====================
 export const PostModel =  models.Post || model<IPost>("Post", postSchema);

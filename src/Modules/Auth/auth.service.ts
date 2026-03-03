@@ -3,7 +3,7 @@ import { IConfirmEmailDTO, ILoginDTO, ISignupDTO } from "./auth.dto";
 import { IUser, UserModel } from "../../DB/models/user.model";
 import { BadRequestException, ConflictException, NotFoundException } from "../../Utils/response/error.response";
 import { UserRepository } from "../../DB/repository/user.repository";
-import { compareHash, generateHash } from "../../Utils/security/hash";
+import { compareHash } from "../../Utils/security/hash";
 import { generateOtp } from "../../Utils/security/generateOtp";
 import { emailEvent } from "../../Utils/email/events/email.events";
 import { createLoginCredentials } from "../../Utils/security/token";  

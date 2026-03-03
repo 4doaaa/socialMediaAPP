@@ -1,7 +1,6 @@
 // ==================== Import Dependencies & Types ====================
 import {HydratedDocument, model,models,Schema, Types } from "mongoose";
 import { generateHash } from "../../Utils/security/hash";
-import { HUserDocument } from "request.express";
 import { emailEvent } from "../../Utils/email/events/email.events";
 
 // ==================== Custom Types & Extensions ====================
@@ -256,7 +255,7 @@ userSchema.pre<UserDocumentWithExtras>(
 );
 
 // ==================== Post-Save Email Notification Hook ====================
-userSchema.post<UserDocumentWithExtras>("save", async function (doc,next) {
+userSchema.post<UserDocumentWithExtras>("save", async function (_doc,_next) {
     if (this.wasNew && this.confirmEmailPlainOTP) {
         emailEvent.emit("confirmEmail", {
             to: this.email,

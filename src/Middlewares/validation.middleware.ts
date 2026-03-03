@@ -21,7 +21,7 @@ export const generalFields = {
       originalname: z.string(),
       encoding: z.string(),
       mimetype: z.string().refine((m) => allowedExtensions.includes(m), {
-        message: "File type not supported",
+      message: "File type not supported",
       }),
       size: z.number(),
       destination: z.string().optional(),
@@ -34,7 +34,7 @@ export const generalFields = {
 
 // ==================== Main Validation Middleware Function ====================
 export const validation = (schema: SchemaType) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     const validationErrors: any[] = [];
 
 // ==================== Iterate & Parse Request Parts (Body, Params, Query) ====================

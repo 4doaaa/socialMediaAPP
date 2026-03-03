@@ -5,8 +5,6 @@ import Mail from "nodemailer/lib/mailer";
 
 export const sendEmail = async (data:Mail.Options) => {
 
-
-
     const transporter : Transporter = createTransport({
         service: "gmail",
 auth: {

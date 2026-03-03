@@ -1,4 +1,5 @@
-// ==================== Import Mongoose Types & Interfaces ====================
+// ==================== Module Imports & Dependencies ====================
+
 import { 
     CreateOptions,
     DeleteResult,
@@ -19,6 +20,9 @@ import {
 // A reusable base repository class for common CRUD operations on any Mongoose model
 
 export abstract class DatabaseRepository<TDocument> {
+
+
+    // ==================== Constructor – Accepts Mongoose Model ====================
 
     constructor(protected readonly model: Model<TDocument>) {}
 
@@ -45,7 +49,7 @@ export abstract class DatabaseRepository<TDocument> {
     }
 
 
-    // ==================== Read Operations (Find One & Find Many) ====================
+    // ==================== Read Operations – Find One Document ====================
 
     async findOne({
         filter,
@@ -63,6 +67,8 @@ export abstract class DatabaseRepository<TDocument> {
         return await doc.exec();
     }
 
+
+    // ==================== Read Operations – Find Multiple Documents ====================
 
     async find({
         filter,
@@ -87,7 +93,7 @@ export abstract class DatabaseRepository<TDocument> {
     }
 
 
-    // ==================== Pagination Logic ====================
+    // ==================== Pagination – Get Paginated Results with Metadata ====================
 
     async paginate({
         filter = {},
@@ -122,7 +128,7 @@ export abstract class DatabaseRepository<TDocument> {
     }
 
 
-    // ==================== Update Operations ====================
+    // ==================== Update Operations – Find One & Update ====================
 
     async findOneAndUpdate({
         filter,
@@ -141,7 +147,7 @@ export abstract class DatabaseRepository<TDocument> {
     }
 
 
-    // ==================== Find Document By ID ====================
+    // ==================== Read Operations – Find Document by MongoDB _id ====================
 
     async findById({
         id,
@@ -160,7 +166,7 @@ export abstract class DatabaseRepository<TDocument> {
     }
 
 
-    // ==================== Specialized Update & Counters ====================
+    // ==================== Specialized Update – Single Document with Version Increment ====================
 
     async updateOne({
         filter,
@@ -175,7 +181,7 @@ export abstract class DatabaseRepository<TDocument> {
     }
 
 
-    // ==================== Delete Operations ====================
+    // ==================== Delete Operations – Delete One Document ====================
 
     async deleteOne({
         filter,
@@ -186,6 +192,8 @@ export abstract class DatabaseRepository<TDocument> {
     }
 
 
+    // ==================== Delete Operations – Delete Multiple Documents ====================
+
     async deleteMany({
         filter,
     }: {
@@ -195,6 +203,8 @@ export abstract class DatabaseRepository<TDocument> {
     }
 
 
+    // ==================== Delete Operations – Find One & Delete ====================
+
     async findOneAndDelete({
         filter,
     }: {
@@ -202,5 +212,6 @@ export abstract class DatabaseRepository<TDocument> {
     }): Promise<HydratedDocument<TDocument> | null> {
         return await this.model.findOneAndDelete(filter);
     }
+
 
 }
